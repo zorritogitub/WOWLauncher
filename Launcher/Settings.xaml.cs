@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Windows;
 using System.Text.RegularExpressions;
@@ -7,7 +7,7 @@ using Launcher.HelpClasses;
 namespace Launcher
 {
     /// <summary>
-    /// Логика взаимодействия для Settings.xaml
+    /// Lógica de interacción para Settings.xaml
     /// </summary>
     public partial class Settings
     {
@@ -58,7 +58,7 @@ namespace Launcher
         {
             var folder = new System.Windows.Forms.FolderBrowserDialog
             {
-                Description = @"Выберите папку с клиентом игры",
+                Description = @"Seleccione la carpeta del cliente del juego",
                 RootFolder = Environment.SpecialFolder.MyComputer,
                 ShowNewFolderButton = false
             };
@@ -71,17 +71,17 @@ namespace Launcher
                 Folder.Text = folderPath;
             }
             else
-            { MessageBox.Show("Файл \"Wow.exe\" не найден!\nПожалуйста выберите корректную папку с игрой!", "Ошибка выбора папки", MessageBoxButton.OK, MessageBoxImage.Error); }
+            { MessageBox.Show("¡Archivo \"Wow.exe\" no encontrado!\nPor favor, seleccione una carpeta válida del juego.", "Error al seleccionar carpeta", MessageBoxButton.OK, MessageBoxImage.Error); }
         }
 
         private void ResetPath_Click(object sender, RoutedEventArgs e)
         {
-            Folder.Text = "Не задано";
+            Folder.Text = "No especificado";
         }
 
         private void ButtonDelete_Click(object sender, RoutedEventArgs e)
         {
-            if (MessageBox.Show("Вы действительно хотите удалить все загруженные файлы сервера?", "Подтверждение удаления", MessageBoxButton.YesNoCancel, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            if (MessageBox.Show("¿Está seguro de que desea eliminar todos los archivos descargados del servidor?", "Confirmar eliminación", MessageBoxButton.YesNoCancel, MessageBoxImage.Question) == MessageBoxResult.Yes)
             {
                 if (Owner is MainWindow m) m.DPatches();
             }
