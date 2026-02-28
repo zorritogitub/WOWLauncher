@@ -50,5 +50,5 @@ jobs:
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ./Launcher/bin/Release/Launcher.exe
-        asset_name: WOWLauncher.exe
+        asset_name: Launcher.exe
         asset_content_type: application/octet-stream
