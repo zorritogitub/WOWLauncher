@@ -3,7 +3,7 @@ name: Build and Release WOWLauncher
 on:
   push:
     tags:
-      - 'v*'   # Se ejecuta cuando subes un tag como v1.0, v1.1, etc.
+      - 'v*'
   workflow_dispatch:
 
 jobs:
