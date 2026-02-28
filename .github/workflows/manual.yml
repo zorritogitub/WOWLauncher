@@ -1,0 +1,54 @@
+name: Build and Release WOWLauncher
+
+on:
+  push:
+    tags:
+      - 'v*'   # Se ejecuta cuando subes un tag como v1.0, v1.1, etc.
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v1.1
+
+    - name: Setup NuGet
+      uses: NuGet/setup-nuget@v1.1.1
+
+    - name: Restore NuGet packages
+      run: nuget restore WOWLauncher.sln
+
+    - name: Build solution
+      run: msbuild WOWLauncher.sln /p:Configuration=Release /p:Platform="Any CPU"
+
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: WOWLauncher ${{ github.ref }}
+        body: |
+          🚀 Nueva versión del WOWLauncher compilada automáticamente.
+          - Login automático
+          - Actualización de parches
+          - Noticias integradas
+          - Configuración de realmlist
+        draft: false
+        prerelease: false
+
+    - name: Upload Release Asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./WOWLauncher/bin/Release/WOWLauncher.exe
+        asset_name: WOWLauncher.exe
+        asset_content_type: application/octet-stream
