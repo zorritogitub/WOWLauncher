@@ -3,7 +3,7 @@ name: Build and Release WOWLauncher
 on:
   push:
     tags:
-      - 'v*'   # Se ejecuta cuando subes un tag como v1.0, v1.1, etc.
+      - 'v*'
   workflow_dispatch:
 
 jobs:
@@ -32,8 +32,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ github.ref }}
-        release_name: WOWLauncher ${{ github.ref }}
+        tag_name: ${{ github.ref_name }}
+        release_name: WOWLauncher ${{ github.ref_name }}
         body: |
           🚀 Nueva versión compilada automáticamente.
           - Login automático
