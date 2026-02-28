@@ -1,6 +1,6 @@
-// Данный програмный продукт является результатом труда и стараний Jumper'а
-// Все права и копирайты закреплены за ним
-// (c) 2011-2019 год
+// Este producto de software es el resultado del trabajo y esfuerzo de Jumper
+// Todos los derechos y copyrights le pertenecen
+// (c) 2011-2019
 //--------------------------------------------------------------------
 //----### ------------------------------------------------------------
 //----###---###-----##----#-------##----#######---#######---######----
@@ -44,7 +44,7 @@ using MouseEventArgs = System.Windows.Input.MouseEventArgs;
 namespace Launcher
 {
     /// <summary>
-    /// Логика взаимодействия для MainWindow.xaml
+    /// Lógica de interacción para MainWindow.xaml
     /// </summary>
     public partial class MainWindow
     {
@@ -90,7 +90,7 @@ namespace Launcher
         #endregion
 
         /// <summary>
-        /// Patch file class
+        /// Clase de archivo de parche
         /// </summary>
         private class PatchFileInfo
         {
@@ -101,13 +101,13 @@ namespace Launcher
             public long FileBytes { get; }
 
             /// <summary>
-            /// Class initializer
+            /// Inicializador de clase
             /// </summary>
-            /// <param name="url">Direct download url</param>
-            /// <param name="name">File name</param>
-            /// <param name="file">Where to download file</param>
-            /// <param name="fileBytes">File size in bytes</param>
-            /// <param name="md5">MD5 hash</param>
+            /// <param name="url">URL de descarga directa</param>
+            /// <param name="name">Nombre del archivo</param>
+            /// <param name="file">Ruta donde descargar el archivo</param>
+            /// <param name="fileBytes">Tamaño del archivo en bytes</param>
+            /// <param name="md5">Hash MD5</param>
             public PatchFileInfo(string url, string name, string file, long fileBytes, string md5)
             {
                 Url = url;
@@ -127,9 +127,9 @@ namespace Launcher
             var readlCursor = Application.GetResourceStream(new Uri("pack://application:,,,/img/cursors/WOW-ESCRIVIR.cur"))?.Stream;
             var hightlCursor = Application.GetResourceStream(new Uri("pack://application:,,,/img/cursors/WOW-ENLACE-CURSOR.cur"))?.Stream;
 
-            MainGrid.Cursor = new Cursor(normalCursor ?? throw new NullReferenceException("Не найден ресурс wow.cur"));
-            version.Cursor = new Cursor(hightlCursor ?? throw new NullReferenceException("Не найден ресурс WOW-ESCRIVIR.cur"));
-            NewsBox.Cursor = new Cursor(readlCursor ?? throw new NullReferenceException("Не найден ресурс WOW-ENLACE-CURSOR.cur"));
+            MainGrid.Cursor = new Cursor(normalCursor ?? throw new NullReferenceException("No se encontró el recurso wow.cur"));
+            version.Cursor = new Cursor(hightlCursor ?? throw new NullReferenceException("No se encontró el recurso WOW-ESCRIVIR.cur"));
+            NewsBox.Cursor = new Cursor(readlCursor ?? throw new NullReferenceException("No se encontró el recurso WOW-ENLACE-CURSOR.cur"));
 
             SetProgressType(Properties.Settings.Default.ProgressBarType);
 
@@ -140,13 +140,13 @@ namespace Launcher
             }
             else
             {
-                MessageBox.Show("Невозможно подключиться к сети интернет, проверьте ваше подключение и повторите попытку", "Ошибка подключения", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("No se puede conectar a Internet, verifique su conexión e intente nuevamente", "Error de conexión", MessageBoxButton.OK, MessageBoxImage.Error);
                 Application.Current.Shutdown();
             }
         }
 
         /// <summary>
-        /// Start file sync by game folder (if it was set before)
+        /// Inicia la sincronización de archivos en la carpeta del juego (si se configuró previamente)
         /// </summary>
         private void FileSync()
         {
@@ -164,18 +164,18 @@ namespace Launcher
                 return;
             }
 
-            var result = MessageBox.Show("Файл \"Wow.exe\" не найден!\nПожалуйста посместите программу в папку с игрой или укажите путь к папке с игрой!\n\nУказать путь сейчас?", "Ошибка местоположения", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            var result = MessageBox.Show("¡Archivo \"Wow.exe\" no encontrado!\nPor favor, coloque el programa en la carpeta del juego o indique la ruta a la carpeta del juego.\n\n¿Indicar la ruta ahora?", "Error de ubicación", MessageBoxButton.YesNo, MessageBoxImage.Question);
             TryToFindFolder(result);
         }
 
         /// <summary>
-        /// Show folder explorer to choose game path
+        /// Muestra el explorador de carpetas para elegir la ruta del juego
         /// </summary>
         private void ShowFolderDialog()
         {
             var folder = new FolderBrowserDialog
             {
-                Description = @"Выберите папку с клиентом игры",
+                Description = @"Seleccione la carpeta del cliente del juego",
                 RootFolder = Environment.SpecialFolder.MyComputer,
                 ShowNewFolderButton = false
             };
@@ -196,14 +196,14 @@ namespace Launcher
                 return;
             }
 
-            var retryResult = MessageBox.Show("В выбранной папке файл \"Wow.exe\" не найден!\nПожалуйста выберите корректную папку с игрой!\n\nПовторить попытку выбора?", "Ошибка выбора папки", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            var retryResult = MessageBox.Show("¡En la carpeta seleccionada no se encontró el archivo \"Wow.exe\"!\nPor favor, seleccione una carpeta válida del juego.\n\n¿Intentar seleccionar nuevamente?", "Error al seleccionar carpeta", MessageBoxButton.YesNo, MessageBoxImage.Question);
             TryToFindFolder(retryResult);
         }
 
         /// <summary>
-        /// Let user to choose game folder if launcher start not in game root folder
+        /// Permite al usuario elegir la carpeta del juego si el launcher no se inicia en la raíz del juego
         /// </summary>
-        /// <param name="retryResult">MessageBox result for </param>
+        /// <param name="retryResult">Resultado del cuadro de diálogo</param>
         private void TryToFindFolder(MessageBoxResult retryResult)
         {
             switch (retryResult)
@@ -218,31 +218,31 @@ namespace Launcher
         }
 
         /// <summary>
-        /// DETECT CLIENT VERSION AND SET UPDATE LIST, REALMLIST, DELETE CACHE
+        /// DETECTA LA VERSIÓN DEL CLIENTE Y ESTABLECE LA LISTA DE ACTUALIZACIONES, REALMLIST, ELIMINA CACHE
         /// </summary>
-        /// <param name="gPath">Wow game root folder</param>
+        /// <param name="gPath">Carpeta raíz del juego</param>
         private void UpdateClient(string gPath)
         {
 
             var clientVersion = FileVersionInfo.GetVersionInfo(Path.Combine(gPath, "Wow.exe"));
             var v = clientVersion.FileVersion.Split(char.Parse(","));
 
-            // Client version detection. Select right patch files to downloading and deletion
+            // Detección de versión del cliente. Selecciona los archivos de parche correctos para descargar y eliminar
             switch (v[3].Trim()) {
                 case "12340":
                     _pListUri = Properties.Settings.Default.PatchDownloadURL;
                     _pListDel = Properties.Settings.Default.PatchToDelete;
                     break;
                
-                // TODO: UNCOMMENT IF YOUR SERVER HAS DIFFERENT VERSION REALMS
-                //case " another_client_build_version":
+                // TODO: DESCOMENTAR SI TU SERVIDOR TIENE REALMS DE DIFERENTE VERSIÓN
+                //case " otra_versión_de_cliente":
                 
-                //Create another string properties in project properties
+                // Crear otras propiedades de cadena en las propiedades del proyecto
                 //    _pListUri = Properties.Settings.Default.PatchDownloadURL;
                 //    _pListDel = Properties.Settings.Default.PatchToDelete;
                 default:
-                    //TODO: CHANGE SERVER NAME AND CLIENT VERSION
-                    var result = MessageBox.Show("Для игры на сервере %SERVER-NAME% требуется клиент версии 3.3.5.12340! Поместите программу в корректную папку с игрой или укажите путь к папке!\n\nУказать путь сейчас?", "Ошибка версии клиента", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                    //TODO: CAMBIAR NOMBRE DEL SERVIDOR Y VERSIÓN DEL CLIENTE
+                    var result = MessageBox.Show("¡Para jugar en el servidor %SERVER-NAME% se requiere la versión 3.3.5.12340 del cliente!\nColoque el programa en la carpeta correcta del juego o indique la ruta a la carpeta.\n\n¿Indicar la ruta ahora?", "Error de versión del cliente", MessageBoxButton.YesNo, MessageBoxImage.Question);
                     TryToFindFolder(result);
                     break;
             }
@@ -256,17 +256,17 @@ namespace Launcher
             }
             catch (Exception)
             {
-                // ignored
+                // ignorado
             }
 
             try
             {
                 var request = (HttpWebRequest)WebRequest.Create(new Uri(Properties.Settings.Default.RealmlistURL));
                 var response = (HttpWebResponse)request.GetResponse();
-                var sr = new StreamReader(response.GetResponseStream() ?? throw new InvalidOperationException($@"Ошибка получения ответа от {Properties.Settings.Default.RealmlistURL}"));
+                var sr = new StreamReader(response.GetResponseStream() ?? throw new InvalidOperationException($@"Error al obtener respuesta de {Properties.Settings.Default.RealmlistURL}"));
                 var realmlist = sr.ReadToEnd();
 
-                #region vanilla realmlist changer
+                #region cambia realmlist vanilla
                 /*
 
                 Utilities.ReamlistUtils.WriteVanillaRealmlist(gPath, realmlist);
@@ -274,15 +274,15 @@ namespace Launcher
                 */
                 #endregion
 
-                //TODO: COMMENT NEXT PART OF CODE IF CLIENT DOESN'T HAVE REALMLIST
-                #region lich king realmlist changer
+                //TODO: COMENTAR LA SIGUIENTE PARTE DEL CÓDIGO SI EL CLIENTE NO TIENE REALMLIST
+                #region cambia realmlist lich king
 
                 Utilities.ReamlistUtils.WriteLocalizedRealmlist(gPath, realmlist);
 
                 #endregion
 
-                //TODO: UNCOMMENT NEXT PART OF CODE IF CLIENT DOESN'T HAVE REALMLIST
-                #region pandaria realmlist changer
+                //TODO: DESCOMENTAR LA SIGUIENTE PARTE DEL CÓDIGO SI EL CLIENTE NO TIENE REALMLIST
+                #region cambia realmlist pandaria
                 /*
 
                 Utilities.ReamlistUtils.WritePandariaRealmlist(gPath, realmlist);
@@ -300,7 +300,7 @@ namespace Launcher
         }
 
         /// <summary>
-        /// Load news to NewsLoader Control
+        /// Carga noticias en el control NewsLoader
         /// </summary>
         private void LoadNews()
         {
@@ -311,14 +311,14 @@ namespace Launcher
         }
 		
         /// <summary>
-        /// Delete old patches or old eventual updates
+        /// Elimina parches antiguos o actualizaciones eventuales anteriores
         /// </summary>
         private void DeleteOldPatches()
         {
             var request = (HttpWebRequest)WebRequest.Create(new Uri(_pListDel));
             var response = (HttpWebResponse)request.GetResponse();
 
-            var reader = new StreamReader(response.GetResponseStream() ?? throw new InvalidOperationException($@"Ошибка получения ответа от {_pListDel}"));
+            var reader = new StreamReader(response.GetResponseStream() ?? throw new InvalidOperationException($@"Error al obtener respuesta de {_pListDel}"));
 
             string line;
 
@@ -332,7 +332,7 @@ namespace Launcher
                 }
                 catch (Exception)
                 {
-                    // ignored
+                    // ignorado
                 }
             }
 
@@ -348,13 +348,13 @@ namespace Launcher
         }
 
         /// <summary>
-        /// Starts get update list for self or game client
+        /// Comienza a obtener la lista de actualizaciones para el launcher o el cliente del juego
         /// </summary>
         private void AutoUpdate()
         {
             var request = (HttpWebRequest)WebRequest.Create(new Uri(Properties.Settings.Default.LauncherVersionUrl));
             var response = (HttpWebResponse)request.GetResponse();
-            var sr = new StreamReader(response.GetResponseStream() ?? throw new InvalidOperationException($@"Ошибка получения ответа от {Properties.Settings.Default.LauncherVersionUrl}"));
+            var sr = new StreamReader(response.GetResponseStream() ?? throw new InvalidOperationException($@"Error al obtener respuesta de {Properties.Settings.Default.LauncherVersionUrl}"));
             var newVersion = sr.ReadToEnd();
 
             var assembly = Assembly.GetExecutingAssembly();
@@ -377,7 +377,7 @@ namespace Launcher
                 btn_play.IsEnabled = false;
                 TaskbarPlay.IsEnabled = false;
                 progress.Value = 0;
-                labelmsg.Content = "Инициализация...";
+                labelmsg.Content = "Inicializando...";
                 _count = 0;
                 startDownloadBackgroundWorker.RunWorkerAsync();
             }
@@ -401,10 +401,10 @@ namespace Launcher
             _length = File.ReadAllLines(_tempPath).Length;
 
             Console.WriteLine($@"-----------------------------------------");
-            Console.WriteLine($@"Start initialization in {DateTime.Now:HH:mm:ss.ffffff}.");
+            Console.WriteLine($@"Inicio de inicialización en {DateTime.Now:HH:mm:ss.ffffff}.");
             Console.WriteLine($@"-----------------------------------------");
 
-            // Get map of downloaded files
+            // Obtener mapa de archivos descargados
             if (File.Exists(_updatePath))
             {
                 _filesCompleted = JsonSerializer<Dictionary<string, string>>.FromString(
@@ -422,15 +422,15 @@ namespace Launcher
                     var path = Utilities.Updater.GetPath(_gPath, ex[1]);
                     var pfi = new PatchFileInfo(ex[0], ex[1], path, Convert.ToInt64(ex[3]), ex[2]);
 
-                    Console.WriteLine($@"[{_count + 1:000}/{_length:000}] Start checking {pfi.Name}.");
+                    Console.WriteLine($@"[{_count + 1:000}/{_length:000}] Comprobando {pfi.Name}.");
 
                     if (File.Exists(path))
                     {
                         if (_filesCompleted.TryGetValue(pfi.Name, out var hash) && hash == pfi.Md5Hash)
                         {
-                            // Ignore downloaded file
+                            // Ignorar archivo ya descargado
                             _count++;
-                            Console.WriteLine($@"{pfi.Name} is updated. {_length - _count} more left.");
+                            Console.WriteLine($@"{pfi.Name} está actualizado. Quedan {_length - _count}.");
                             continue;
                         }
 
@@ -446,10 +446,10 @@ namespace Launcher
 
                         if (pfi.Md5Hash == sb.ToString())
                         {
-                            // Ignore matched file and add to completed map
+                            // Ignorar archivo coincidente y agregar al mapa de completados
                             _filesCompleted[pfi.Name] = pfi.Md5Hash;
                             _count++;
-                            Console.WriteLine($@"Done with {pfi.Name}. {_length - _count} more left.");
+                            Console.WriteLine($@"Completado con {pfi.Name}. Quedan {_length - _count}.");
                             SaveCurrentCompletedFiles();
                             continue;
                         }
@@ -462,7 +462,7 @@ namespace Launcher
             }
 
             Console.WriteLine($@"--------------------------------------");
-            Console.WriteLine($@"End initialization in {DateTime.Now:HH:mm:ss.ffffff}.");
+            Console.WriteLine($@"Fin de inicialización en {DateTime.Now:HH:mm:ss.ffffff}.");
             Console.WriteLine($@"--------------------------------------");
 
             while (_patchQueue.Count != 0)
@@ -526,7 +526,7 @@ namespace Launcher
                             }
                             catch (Exception)
                             {
-                                // ignored
+                                // ignorado
                             }
                         }
                     }
@@ -583,17 +583,17 @@ namespace Launcher
             var total = Utilities.Updater.DetectSize(_totalBytes);
             var speed = Utilities.Updater.DetectSize(dSpeed);
 
-            var downloaded = $@"Загружено ({_count}/{_length}) : {received} /  {total}";
+            var downloaded = $@"Descargado ({_count}/{_length}) : {received} / {total}";
 
             var awaiting = (Convert.ToDouble(_totalBytes - (_currentBytes - CurrentBytes2)) / 1024) / (Convert.ToDouble(CurrentBytes2) / 1024 / StopWatch.Elapsed.TotalSeconds) - (Convert.ToDouble(CurrentBytes2) / 1024) / (Convert.ToDouble(CurrentBytes2) / 1024 / StopWatch.Elapsed.TotalSeconds);
 
-            labelprogress.Content = $@"{downloaded}  ({speed}/с) ~{((int)(awaiting / 3600)):0} ч {((int)(awaiting % 3600 / 60)):0} мин {(awaiting % 3600 % 60):0} сек";
+            labelprogress.Content = $@"{downloaded}  ({speed}/s) ~{((int)(awaiting / 3600)):0} h {((int)(awaiting % 3600 / 60)):0} min {(awaiting % 3600 % 60):0} s";
         }
 
         /// <summary>
-        /// Downloading done dispatcher event
+        /// Evento del dispatcher cuando se completa la descarga
         /// </summary>
-        /// <param name="visible">Show download accesories or not</param>
+        /// <param name="visible">Mostrar u ocultar accesorios de descarga</param>
         private void DownloadCompleted(bool visible)
         {
             if (visible)
@@ -602,20 +602,20 @@ namespace Launcher
                 TaskbarProgress.ProgressState = TaskbarItemProgressState.Normal;
                 TaskbarPlay.IsEnabled = false;
                 btn_play.IsEnabled = false;
-                labelmsg.Content = "Идет обновление...";
+                labelmsg.Content = "Actualizando...";
             }
             else
             {
                 DownloadBar.Visibility = Visibility.Hidden;
                 TaskbarProgress.ProgressState = TaskbarItemProgressState.None;
                 TaskbarPlay.IsEnabled = true;
-                labelmsg.Content = "Игра обновлена";
+                labelmsg.Content = "Juego actualizado";
                 btn_play.IsEnabled = true;
             }
         }
 
         /// <summary>
-        /// Window moving event
+        /// Evento para mover la ventana
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -628,7 +628,7 @@ namespace Launcher
         }
 
         /// <summary>
-        /// Deleting all patches while whant leave server
+        /// Elimina todos los parches al salir del servidor
         /// </summary>
         public void DPatches()
         {
@@ -650,20 +650,20 @@ namespace Launcher
                     }
                     catch
                     {
-                        // ignored
+                        // ignorado
                     }
                 }
             }
 
             File.Delete(_updatePath);
 
-            MessageBox.Show("Все файлы успешно удалены", "Удаление файлов", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show("Todos los archivos se han eliminado correctamente", "Eliminación de archivos", MessageBoxButton.OK, MessageBoxImage.Information);
             btn_play.Visibility = Visibility.Hidden;
-            labelmsg.Content = "Запуск клиента невозможен";
+            labelmsg.Content = "No se puede iniciar el cliente";
         }
 
         /// <summary>
-        /// Set download progress type like just total progress, just current progress, mixed progres
+        /// Establece el tipo de progreso de descarga: solo progreso total, solo progreso actual, progreso mixto
         /// </summary>
         /// <param name="index"></param>
         public void SetProgressType(int index)
@@ -722,12 +722,12 @@ namespace Launcher
                             Application
                                 .GetResourceStream(new Uri("pack://application:,,,/img/101.ico"))
                                 ?.Stream 
-                            ?? throw new NullReferenceException("Не найден ресурс 101.ico")
+                            ?? throw new NullReferenceException("No se encontró el recurso 101.ico")
                             ),
                         Visible = true
                     };
 
-                    ni.ShowBalloonTip(2000, "Программа запуска", "Программа запуска продолжает работать в фоновом режиме. Чтобы развернуть ее, используйте двойной щелчек левой кнопки мыши", ToolTipIcon.Info);
+                    ni.ShowBalloonTip(2000, "Programa iniciado", "El programa continúa ejecutándose en segundo plano. Para restaurarlo, use doble clic izquierdo", ToolTipIcon.Info);
                     Hide();
                     ni.DoubleClick +=
                         delegate
@@ -788,15 +788,15 @@ namespace Launcher
             {
                 MessageBox.Show(ex.Message);
 
-                if (ex.Message.Equals("Не удается найти указанный файл"))
+                if (ex.Message.Equals("No se encuentra el archivo especificado"))
                     ShowFolderDialog();
             }
         }
 
         /// <summary>
-        /// Show WindowDialog with blur effects
+        /// Muestra una ventana modal con efectos de desenfoque
         /// </summary>
-        /// <param name="modalWindow">Modal window to show</param>
+        /// <param name="modalWindow">Ventana modal a mostrar</param>
         private void ShowModalWithEffect (Window modalWindow)
         {
             var blur = new BlurEffect();
@@ -808,7 +808,7 @@ namespace Launcher
             {
                 settings.BtnDel.IsEnabled = false;
                 settings.ResetPath.IsEnabled = false;
-                settings.BtnDel.ToolTip = "Не возможно выполнить\nво время процесса обновления";
+                settings.BtnDel.ToolTip = "No se puede ejecutar\ndurante el proceso de actualización";
             }
 
             modalWindow.Owner = this;
@@ -819,7 +819,7 @@ namespace Launcher
 
         private void Version_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            // Set motions only on Left button click
+            // Solo acciones con clic izquierdo
             if (e.LeftButton != MouseButtonState.Pressed) return;
 
             ShowModalWithEffect(new VerUpd());
