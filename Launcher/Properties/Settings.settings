@@ -12,7 +12,7 @@
       <Value Profile="(Default)">https://www.dropbox.com/s/5mt8l6yygd21gzi/version.txt?dl=1</Value>
     </Setting>
     <Setting Name="LauncherNewsFileUrl" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">https://www.dropbox.com/s/xl9sgprm0zpmbps/news.txt?dl=1</Value>
+      <Value Profile="(Default)">https://github.com/zorritogitub/WOWLauncher/blob/master/news.txt</Value>
     </Setting>
     <Setting Name="LauncherUpdates" Type="System.String" Scope="Application">
       <Value Profile="(Default)">https://www.dropbox.com/s/xu0wubztqckn9fi/updates.txt?dl=1</Value>
