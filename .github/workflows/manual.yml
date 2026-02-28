@@ -26,9 +26,24 @@ jobs:
     - name: Build solution
       run: msbuild Launcher/Launcher.sln /p:Configuration=Release /p:Platform="Any CPU"
 
+    - name: Find and verify executable
+      run: |
+        # Buscar el ejecutable y verificar que existe
+        if (Test-Path "./Launcher/bin/Release/Launcher.exe") {
+          echo "Executable found in Release folder"
+        } elseif (Test-Path "./Launcher/bin/Release/net*/Launcher.exe") {
+          echo "Executable found in net* subfolder"
+          # Copiar a ubicación esperada o ajustar ruta
+        } else {
+          Write-Error "Executable not found!"
+          exit 1
+        }
+
     - name: Release
       uses: softprops/action-gh-release@v1
       with:
-        files: ./Launcher/bin/Release/Launcher.exe
+        files: |
+          ./Launcher/bin/Release/Launcher.exe
+          ./Launcher/bin/Release/**/Launcher.exe
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
