@@ -26,24 +26,38 @@ jobs:
     - name: Build solution
       run: msbuild Launcher/Launcher.sln /p:Configuration=Release /p:Platform="Any CPU"
 
-    - name: Find and verify executable
+    - name: Debug - Find and prepare executable
       run: |
-        # Buscar el ejecutable y verificar que existe
-        if (Test-Path "./Launcher/bin/Release/Launcher.exe") {
-          echo "Executable found in Release folder"
-        } elseif (Test-Path "./Launcher/bin/Release/net*/Launcher.exe") {
-          echo "Executable found in net* subfolder"
-          # Copiar a ubicación esperada o ajustar ruta
+        Write-Host "=== Searching for built files ==="
+        Get-ChildItem -Path . -Recurse -Include "*.exe", "*.dll" | ForEach-Object { $_.FullName }
+        
+        Write-Host "=== Looking for Launcher.exe ==="
+        $exePath = Get-ChildItem -Path "./Launcher/bin" -Recurse -Filter "Launcher.exe" | Select-Object -First 1
+        
+        if ($exePath) {
+            Write-Host "Found executable at: $($exePath.FullName)"
+            
+            # Crear carpeta output
+            New-Item -ItemType Directory -Force -Path "./output" | Out-Null
+            
+            # Copiar ejecutable y archivos relacionados
+            Copy-Item -Path $exePath.FullName -Destination "./output/Launcher.exe" -Force
+            
+            # Copiar también archivos .dll y .config si existen
+            $sourceDir = $exePath.Directory.FullName
+            Get-ChildItem -Path $sourceDir -Include "*.dll", "*.config", "*.pdb" -Recurse | 
+                Copy-Item -Destination "./output/" -Force
+            
+            Write-Host "Files copied to output folder:"
+            Get-ChildItem -Path "./output"
         } else {
-          Write-Error "Executable not found!"
-          exit 1
+            Write-Error "Launcher.exe not found!"
+            exit 1
         }
 
     - name: Release
       uses: softprops/action-gh-release@v1
       with:
-        files: |
-          ./Launcher/bin/Release/Launcher.exe
-          ./Launcher/bin/Release/**/Launcher.exe
+        files: ./output/*
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
