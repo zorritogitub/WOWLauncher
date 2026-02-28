@@ -9,7 +9,7 @@ on:
       version:
         description: 'Versión para la release (ej: v1.0.0)'
         required: true
-        default: 'v1.2.3'
+        default: 'v3.0.0'
         type: string
 
 jobs:
@@ -76,7 +76,7 @@ jobs:
         tag_name: ${{ github.event.inputs.version || github.ref_name }}
         name: WOWLauncher ${{ github.event.inputs.version || github.ref_name }}
         body: |
-          # 🚀 WOWLauncher ${{ github.event.inputs.version || github.ref_name }}
+          # 🚀 WOWLauncher Versión Traducida al Español ${{ github.event.inputs.version || github.ref_name }}
           
           ## 📦 Archivos incluidos:
           - **Launcher.exe** ($(Get-Item ./release/Launcher.exe).Length/1KB KB)
