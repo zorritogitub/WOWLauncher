@@ -5,6 +5,16 @@ on:
     tags:
       - 'v*'
   workflow_dispatch:
+    inputs:
+      create_release:
+        description: 'Create GitHub Release'
+        required: true
+        default: 'true'
+        type: boolean
+      tag_name:
+        description: 'Tag name for release (required if create_release is true)'
+        required: false
+        type: string
 
 jobs:
   build:
@@ -26,37 +36,50 @@ jobs:
     - name: Build solution
       run: msbuild Launcher/Launcher.sln /p:Configuration=Release /p:Platform="Any CPU"
 
-    - name: Find executable
+    - name: Prepare artifacts
       run: |
-        Write-Host "=== Buscando ejecutable ==="
-        $exePath = Get-ChildItem -Path "./Launcher/bin/Release" -Filter "*.exe" | Select-Object -First 1
+        Write-Host "=== Preparando archivos ==="
+        New-Item -ItemType Directory -Force -Path "./output" | Out-Null
         
-        if ($exePath) {
-          Write-Host "✅ Encontrado: $($exePath.FullName)"
-          Write-Host "Nombre del archivo: $($exePath.Name)"
-          
-          # Crear carpeta output
-          New-Item -ItemType Directory -Force -Path "./output" | Out-Null
-          
-          # Copiar el ejecutable
-          Copy-Item -Path $exePath.FullName -Destination "./output/Launcher.exe" -Force
-          
-          # Copiar también archivos necesarios
-          Copy-Item -Path "./Launcher/bin/Release/*.dll" -Destination "./output/" -ErrorAction SilentlyContinue
-          Copy-Item -Path "./Launcher/bin/Release/*.config" -Destination "./output/" -ErrorAction SilentlyContinue
-          
-          Write-Host "Archivos en output:" 
-          Get-ChildItem "./output"
-        } else {
-          Write-Error "❌ No se encontró ningún .exe en ./Launcher/bin/Release/"
-          Write-Host "Contenido de Release:" 
-          Get-ChildItem "./Launcher/bin/Release"
-          exit 1
-        }
+        # Copiar ejecutable y archivos relacionados
+        Copy-Item -Path "./Launcher/bin/Release/Launcher.exe" -Destination "./output/" -Force
+        Copy-Item -Path "./Launcher/bin/Release/*.dll" -Destination "./output/" -ErrorAction SilentlyContinue
+        Copy-Item -Path "./Launcher/bin/Release/*.config" -Destination "./output/" -ErrorAction SilentlyContinue
+        Copy-Item -Path "./Launcher/bin/Release/*.pdb" -Destination "./output/" -ErrorAction SilentlyContinue
+        
+        # Crear un ZIP para facilitar la descarga
+        Compress-Archive -Path "./output/*" -DestinationPath "./WOWLauncher.zip" -Force
+        
+        Write-Host "Archivos preparados:"
+        Get-ChildItem "./output"
+        Write-Host "ZIP creado:"
+        Get-ChildItem "./WOWLauncher.zip"
 
-    - name: Release
+    - name: Upload artifacts (siempre)
+      uses: actions/upload-artifact@v3
+      with:
+        name: WOWLauncher
+        path: |
+          ./output/
+          ./WOWLauncher.zip
+
+    - name: Create Release (solo si hay tag o se solicita manualmente)
+      if: startsWith(github.ref, 'refs/tags/') || github.event.inputs.create_release == 'true'
       uses: softprops/action-gh-release@v1
       with:
-        files: ./output/*
+        tag_name: ${{ github.event.inputs.tag_name || github.ref_name }}
+        name: Release ${{ github.event.inputs.tag_name || github.ref_name }}
+        body: |
+          ## WOWLauncher Build Automático
+          
+          ### Archivos incluidos:
+          - Launcher.exe - Ejecutable principal
+          - Archivos de configuración y DLLs necesarios
+          - WOWLauncher.zip - Todos los archivos comprimidos
+          
+          Build realizado: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        files: |
+          ./output/*
+          ./WOWLauncher.zip
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
