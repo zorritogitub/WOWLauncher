@@ -1,10 +1,10 @@
-﻿using System.Threading;
+using System.Threading;
 using System.Windows;
 
 namespace Launcher
 {
     /// <summary>
-    /// Логика взаимодействия для App.xaml
+    /// Lógica de interacción para App.xaml
     /// </summary>
     public partial class App
     {
@@ -14,7 +14,7 @@ namespace Launcher
             _instanceMutex = new Mutex(true, "F37E84CB-D76A-49B1-A1AC-80870903087B", out var createdNew);
             if (!createdNew)
             {
-                MessageBox.Show("Копия лаунчера уже запущена на данном компьютере", "Попытка повторного запуска", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("Ya hay una instancia del launcher ejecutándose en este equipo", "Intento de ejecución múltiple", MessageBoxButton.OK, MessageBoxImage.Warning);
                 _instanceMutex = null;
                 Current.Shutdown();
                 return;
